@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+    <style>
+    	* { 
+            padding: 0; 
+            margin: 0; }
+        p{
+            text-align: center;
+            margin-top: 10px;
+        }
+    	canvas { 
+            background: #eee; 
+            display: block; 
+            margin: 0 auto; 
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <p>Could not add animation to left side and did not add loop</p>
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+    <script>
+        //code
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        
+        //variables for horizontal drawRecX..
+        var bHx = 10,//bottom rec height along x horiz
+            bWx = 40,//bottom rec width along x horiz
+            xR = canvas.width-bWx,//right
+            yBh = canvas.height-bHx,//bottom
+            dxR = 2,//displacement of xL to the right
+            position = xL+=dxR,//simply and clean code
+            recOutLeft = (canvas.width*0);
+        //variables for vertical drawRecY..
+        var tHx = 40,
+            tWx = 10,
+            xL = 0,//left
+            yT = 0,//top 
+            xB = canvas.width-tWx,//right
+            yB = canvas.height-tHx,//bottom position
+            dyR = 2,
+            rightLT = xR -= dxR;
+            
+            
+            //use fillRec below to test position
+            //turn off drawRec & setInterval
+            /*ctx.fillStyle = 'blue';
+            ctx.fillRect(xL,yT,tWx,tHx);*/
+        //draws rec border
+        function drawRecX(){//bottom Left x
+           //before fillRec will start w/color
+            ctx.fillStyle = 'red';
+            ctx.fillRect(xL,yBh,bWx,bHx);
+        }
+        function drawRecXtR(){//top right x
+            ctx.fillStyle = 'red';
+            ctx.fillRect(xR,yT,bWx,bHx);
+        }
+        function drawRecY(){//top left y
+            ctx.fillStyle = 'red';
+            ctx.fillRect(xL,yT,tWx,tHx);
+        }
+        function drawRecYbR(){//bottom right y
+            ctx.fillStyle = 'red';
+            ctx.fillRect(xB,yB,tWx,tHx);
+        }
+        //draws & redraws rec along the x-axis
+        function drawX(){
+            //clearrect clears canvas so rec repeats but not as path
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRecX();//references outer function
+            //moves rec right;setInterval repeats looks like path
+            xL += dxR;
+            //collision detection w/o bounce
+            //if position is either[OR]outside of canvas.width
+            //clear canvas
+            //if (position > 440 || position<recOutLeft
+            if (xL >480){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawY();//draws bottom right going up 
+                if(yB<0){//calls variable inside drawY
+                    drawXT();//changes direction to top going left
+                }
+            }
+        }
+        function drawY(){//bottom/right up
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRecYbR();
+            yB += -dyR;//move from bottom right up
+            if(yB<0){//stops at codition
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        function drawXT(){//right left
+            drawRecXtR();
+            xR -= dxR;
+            if(xR<0){//stops at codition
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        //could not add it to rest of drawX()
+        function drawYL(){//top/left down
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRecY();
+            yT += dyR;
+            if(yT>320){
+                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        
+        setInterval(drawX,5);//1sec loop of drawRec moving
+        //setInterval(drawYL,5);
+    </script>
+</body>
+</html>
